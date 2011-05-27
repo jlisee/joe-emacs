@@ -27,10 +27,22 @@
 (column-number-mode t) ;; Show column numbers
 (show-paren-mode t) ;; Match parens
 
+;; Saving place in files
+(setq save-place-file "~/.emacs.d/saveplace") ;; keep my ~/ clean
+;;(setq-default save-place t)                 ;; activate it for all buffers
+(require 'saveplace)                          ;; get the package
+
+;; Width and height
+(set-screen-width 80)
+(set-screen-height 67)
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Global Key Bindings
 ;; ----------------------------------------------------------------------- ;;
+
+;; Change goto line
+(global-set-key "\C-x\C-g" 'goto-line)
+(global-set-key "\C-c\C-g" 'goto-line)
 
 ;; (define-key global-map "\C-xw" 'what-line)
 ;; (define-key global-map "\C-z" 'undo)
@@ -133,8 +145,9 @@
 ;; Misc Libraries and Custom modes
 ;; ----------------------------------------------------------------------- ;;
 
-;; Load all the sub directories in my local emacs to the path
-(let ((default-directory "~/files/emacs"))
+;; Load all the sub directories holding this .emacs. This assumes the .emacs
+;; is really a symlink to a subdirectory containing all the needed emacs files
+(let ((default-directory (file-name-directory (file-truename load-file-name))))
       (normal-top-level-add-subdirs-to-load-path))
 
 ;; Smart tabing - tab based smart indenting useful for editing code that uses 
@@ -288,6 +301,32 @@
 (add-hook 'latex-mode-hook (lambda () (longlines-mode +1)))
 
 
+
+;; ----------------------------------------------------------------------- ;;
+;; Specials for X Window System
+;; ----------------------------------------------------------------------- ;;
+(if (not window-system)
+      ;; ispell
+      ;; ----------------------
+      ;; (A few changes on ispell)
+      (setq ispell-highlight-face 'underline);)
+
+  ;;
+  ;; Some dialog
+  ;; ------------------
+  (setq use-dialog-box t)
+  ;;
+  ;; less dialog
+  ;; -----------
+  ;(menu-prompting nil)
+  ;; 
+  ;; Set X synchrone
+  ;; ---------------
+  ;; Speed up
+  (setq mouse-scroll-delay 0)
+  (setq x-selection-timeout 0)
+)
+
 ;; ----------------------------------------------------------------------- ;;
 ;; Custom Set Variables
 ;; ----------------------------------------------------------------------- ;;
@@ -297,14 +336,11 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(delete-selection-mode nil)
  '(inhibit-startup-screen t)
  '(matlab-functions-have-end t)
  '(matlab-shell-command "/opt/matlab/bin/matlab")
  '(matlab-verify-on-save-flag t)
- '(mlint-programs (quote ("mlint" "glnx86/mlint" "/opt/matlab/bin/glnx86/mlint"))))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
+ '(mlint-programs (quote ("mlint" "glnx86/mlint" "/opt/matlab/bin/glnx86/mlint")))
+ '(safe-local-variable-values (quote ((save-place . t))))
+ '(scroll-bar-mode (quote right)))
