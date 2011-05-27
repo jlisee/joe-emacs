@@ -1,0 +1,6 @@
+This is located on SourceForge in a CVS repository. Just pull down the latest
+files replace the current ones, then strip the CVS directory:
+
+cvs -d:pserver:anonymous@matlab-emacs.cvs.sourceforge.net:/cvsroot/matlab-emacs login 
+
+cvs -z3 -d:pserver:anonymous@matlab-emacs.cvs.sourceforge.net:/cvsroot/matlab-emacs co -P modulename
