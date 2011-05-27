@@ -1,7 +1,8 @@
 ;;-----------------------------------------------------------------------------
 ;; .emacs configuration file
 ;; author: Joseph Lisee
-;; tested on: GNU Emacs 23.1.1
+;; tested on:  GNU Emacs 22.3.1
+;;             GNU Emacs 23.1.1
 ;;
 ;; packages supported:
 ;;   time, cl, cc-mode, font-lock, ede, eieio, elib, jde, func-menu, 
@@ -138,6 +139,7 @@
 (add-to-list 'auto-mode-alist '("wscript_build$" . python-mode))
 (add-to-list 'auto-mode-alist '("wscript$" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.xdr$" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.m$" . matlab-mode))
 
 
@@ -197,6 +199,30 @@
   "Joe's C/C++ Programming Style")
 (c-add-style "PERSONAL" my-c-style)
 
+;; Comment out "#if 0 comment sections"
+(defun my-c-mode-font-lock-if0 (limit)
+  (save-restriction
+    (widen)
+    (save-excursion
+      (goto-char (point-min))
+      (let ((depth 0) str start start-depth)
+        (while (re-search-forward "^\\s-*#\\s-*\\(if\\|else\\|endif\\)" limit 'move)
+          (setq str (match-string 1))
+          (if (string= str "if")
+              (progn
+                (setq depth (1+ depth))
+                (when (and (null start) (looking-at "\\s-+0"))
+                  (setq start (match-end 0)
+                        start-depth depth)))
+            (when (and start (= depth start-depth))
+              (c-put-font-lock-face start (match-beginning 0) 'font-lock-comment-face)
+              (setq start nil))
+            (when (string= str "endif")
+              (setq depth (1- depth)))))
+        (when (and start (> depth 0))
+          (c-put-font-lock-face start (point) 'font-lock-comment-face)))))
+  nil)
+
 ;; Customizations for all modes in CC Mode.
 (defun my-c-mode-common-hook ()
   ;; set my personal style for the current buffer
@@ -204,8 +230,12 @@
   ;; other customizations
   (setq tab-width 4
         ;; this will make sure spaces are used instead of tabs
-        indent-tabs-mode nil))
+        indent-tabs-mode nil)
+  (font-lock-add-keywords
+   nil
+   '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end))
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
 
 ;; TODO: Consider these
   ;; (progn (define-key c-mode-base-map "\C-m" 'newline-and-indent)
@@ -282,6 +312,7 @@
 ;; where the cursor is with regexs, etc.
 ;; Docs: see here for info on using emacs lisp:
 ;;   http://www.emacswiki.org/emacs/EmacsLisp
+
 
 ;; ----------------------------------------------------------------------- ;;
 ;; iswitch (better buffer switching)
