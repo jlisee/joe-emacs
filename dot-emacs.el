@@ -35,7 +35,11 @@
 
 ;; Width and height
 (set-screen-width 80)
-(set-screen-height 67)
+(set-screen-height 72)
+
+;; Remove Menu bar (tool bar disabled with tool-bar+ below)
+(menu-bar-mode -99)
+
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Global Key Bindings
@@ -44,6 +48,9 @@
 ;; Change goto line
 (global-set-key "\C-x\C-g" 'goto-line)
 (global-set-key "\C-c\C-g" 'goto-line)
+(global-set-key (kbd "C-x m") 'menu-bar-mode) ; menu hide/show
+(global-set-key (kbd "C-x t") 'show-tool-bar-for-one-command) ; toolbar show
+(global-set-key "\C-c\C-a" 'mark-whole-buffer) ; rebind select all
 
 ;; (define-key global-map "\C-xw" 'what-line)
 ;; (define-key global-map "\C-z" 'undo)
@@ -348,6 +355,13 @@
 (setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
 (setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 
+
+;; ----------------------------------------------------------------------- ;;
+;; Tool-Bar+ (easy hiding and showing of toolbar)
+;; ----------------------------------------------------------------------- ;;
+
+(require 'tool-bar+)
+(tool-bar-pop-up-mode 1)
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Latex
