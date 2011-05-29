@@ -393,6 +393,10 @@
   ;; Speed up
   (setq mouse-scroll-delay 0)
   (setq x-selection-timeout 0)
+
+  ;; Have cut and paste work properly
+  (setq x-select-enable-clipboard t)
+  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 )
 
 ;; ----------------------------------------------------------------------- ;;
