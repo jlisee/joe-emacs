@@ -322,7 +322,31 @@
 
 (iswitchb-mode 1)
 ;; These ignore all *...* buffers
-(setq iswitchb-buffer-ignore '("^*"))
+(setq iswitchb-buffer-ignore '("^ " "^\\*"))
+
+;; Handle uniqify buffer renaming
+(defadvice iswitchb-kill-buffer (after rescan-after-kill activate)
+  "*Regenerate the list of matching buffer names after a kill.
+    Necessary if using `uniquify' with `uniquify-after-kill-buffer-p'
+    set to non-nil."
+  (setq iswitchb-buflist iswitchb-matches)
+  (iswitchb-rescan))
+(defun iswitchb-rescan ()
+  "*Regenerate the list of matching buffer names."
+  (interactive)
+  (iswitchb-make-buflist iswitchb-default)
+  (setq iswitchb-rescan t))
+
+
+;; ----------------------------------------------------------------------- ;;
+;; uniqify (better duplicate buffer naming)
+;; ----------------------------------------------------------------------- ;;
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'reverse) ; place info after buffer name
+(setq uniquify-separator "|")
+(setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 
 
 ;; ----------------------------------------------------------------------- ;;
@@ -330,7 +354,6 @@
 ;; ----------------------------------------------------------------------- ;;
 
 (add-hook 'latex-mode-hook (lambda () (longlines-mode +1)))
-
 
 
 ;; ----------------------------------------------------------------------- ;;
