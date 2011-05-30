@@ -33,13 +33,16 @@
 ;;(setq-default save-place t)                 ;; activate it for all buffers
 (require 'saveplace)                          ;; get the package
 
-;; Width and height
-(set-screen-width 80)
-(set-screen-height 72)
 
-;; Remove Menu bar (tool bar disabled with tool-bar+ below)
-(menu-bar-mode -99)
+(if (not window-system)
+    nil
+  ;; Width and height
+  (set-screen-width 80)
+  (set-screen-height 72)
 
+  ;; Remove Menu bar (tool bar disabled with tool-bar+ below)
+  (menu-bar-mode -99)
+)
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Global Key Bindings
