@@ -215,6 +215,7 @@
 (c-add-style "PERSONAL" my-c-style)
 
 ;; Comment out "#if 0 comment sections"
+;; TODO: update this to handle 1
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
     (widen)
