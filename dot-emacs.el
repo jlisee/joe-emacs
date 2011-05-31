@@ -28,6 +28,9 @@
 (column-number-mode t) ;; Show column numbers
 (show-paren-mode t) ;; Match parens
 
+;; TAB SIZE (can't get this to work)
+;;(defun jl-tab-size() 2)
+
 ;; Saving place in files
 (setq save-place-file "~/.emacs.d/saveplace") ;; keep my ~/ clean
 ;;(setq-default save-place t)                 ;; activate it for all buffers
@@ -173,7 +176,7 @@
 ;; Create my personal style custom C coding style
 (defconst my-c-style
   '((c-auto-newline                 . nil)
-    (c-basic-offset                 . 4)
+    (c-basic-offset                 . 2)
     (c-comment-only-line-offset     . 0)
     (c-echo-syntactic-information-p . nil)
     (c-hungry-delete-key            . 0)
@@ -182,7 +185,7 @@
     (c-hanging-braces-alist         . ((substatement-open after)
                                        (brace-list-open)))
     (c-offsets-alist                . ((arglist-close . c-lineup-arglist)
-                                       (case-label . 4)
+                                       (case-label . 2)
                                        (substatement-open . 0)
                                        (block-open . 0) ; no space before {
                                        (knr-argdecl-intro . -)))
@@ -228,7 +231,7 @@
   ;; set my personal style for the current buffer
   (c-set-style "PERSONAL")
   ;; other customizations
-  (setq tab-width 4
+  (setq tab-width 2
         ;; this will make sure spaces are used instead of tabs
         indent-tabs-mode nil)
   (font-lock-add-keywords
@@ -273,7 +276,7 @@
 (add-hook 'yaml-mode-hook
   '(lambda ()
     (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-(setq yaml-indent-offset 4)
+(setq yaml-indent-offset 2)
 
 
 ;; ----------------------------------------------------------------------- ;;
