@@ -36,9 +36,16 @@
 ;;(setq-default save-place t)                 ;; activate it for all buffers
 (require 'saveplace)                          ;; get the package
 
-;; Width and height
-(set-screen-width 80)
-(set-screen-height 67)
+
+(if (not window-system)
+    nil
+  ;; Width and height
+  (set-screen-width 80)
+  (set-screen-height 72)
+
+  ;; Remove Menu bar (tool bar disabled with tool-bar+ below)
+  (menu-bar-mode -99)
+)
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Global Key Bindings
@@ -47,6 +54,11 @@
 ;; Change goto line
 (global-set-key "\C-x\C-g" 'goto-line)
 (global-set-key "\C-c\C-g" 'goto-line)
+(global-set-key (kbd "C-x m") 'menu-bar-mode) ; menu hide/show
+(global-set-key (kbd "C-x t") 'show-tool-bar-for-one-command) ; toolbar show
+(global-set-key "\C-c\C-a" 'mark-whole-buffer) ; rebind select all
+(global-set-key "\C-cc" 'comment-region)
+(global-set-key "\C-cu" 'uncomment-region)
 
 ;; (define-key global-map "\C-xw" 'what-line)
 ;; (define-key global-map "\C-z" 'undo)
@@ -255,6 +267,18 @@
 
 
 ;; ----------------------------------------------------------------------- ;;
+;; Compilation Mode Customizations
+;; ----------------------------------------------------------------------- ;;
+
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+
+;; ----------------------------------------------------------------------- ;;
 ;; Time Mode (AM/PM Clock in lower bar)
 ;; ----------------------------------------------------------------------- ;;
 
@@ -337,15 +361,46 @@
           ("<left>"  . iswitchb-prev-match)
           ("<up>"    . ignore             )
           ("<down>"  . ignore             ))))
+
 (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 
+;; Handle uniqify buffer renaming
+(defadvice iswitchb-kill-buffer (after rescan-after-kill activate)
+  "*Regenerate the list of matching buffer names after a kill.
+    Necessary if using `uniquify' with `uniquify-after-kill-buffer-p'
+    set to non-nil."
+  (setq iswitchb-buflist iswitchb-matches)
+  (iswitchb-rescan))
+(defun iswitchb-rescan ()
+  "*Regenerate the list of matching buffer names."
+  (interactive)
+  (iswitchb-make-buflist iswitchb-default)
+  (setq iswitchb-rescan t))
+
+
+;; ----------------------------------------------------------------------- ;;
+;; uniqify (better duplicate buffer naming)
+;; ----------------------------------------------------------------------- ;;
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'reverse) ; place info after buffer name
+(setq uniquify-separator "|")
+(setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+
+
+;; ----------------------------------------------------------------------- ;;
+;; Tool-Bar+ (easy hiding and showing of toolbar)
+;; ----------------------------------------------------------------------- ;;
+
+(require 'tool-bar+)
+(tool-bar-pop-up-mode 1)
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Latex
 ;; ----------------------------------------------------------------------- ;;
 
 (add-hook 'latex-mode-hook (lambda () (longlines-mode +1)))
-
 
 
 ;; ----------------------------------------------------------------------- ;;
@@ -371,6 +426,10 @@
   ;; Speed up
   (setq mouse-scroll-delay 0)
   (setq x-selection-timeout 0)
+
+  ;; Have cut and paste work properly
+  (setq x-select-enable-clipboard t)
+  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 )
 
 ;; ----------------------------------------------------------------------- ;;
