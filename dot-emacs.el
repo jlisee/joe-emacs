@@ -174,6 +174,12 @@
 ;; Full matlab integration
 (load-library "matlab-load")
 
+;; Put in the 80 character gutter line
+(require 'fill-column-indicator)
+(setq fci-style 'rule) ;; Draw a thing line
+(setq fci-rule-width 1) ;; Make the line only 1 pixel wide
+(setq fci-rule-color "gray35")
+
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Setup C mode
@@ -249,7 +255,11 @@
         indent-tabs-mode nil)
   (font-lock-add-keywords
    nil
-   '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end))
+   '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
+  (setq-default fill-column 80) ;; Fill column at 80
+  (if (not window-system)
+      nil
+    (fci-mode)))
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 
