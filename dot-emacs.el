@@ -128,7 +128,8 @@
            (((class color)) (:foreground "orange1")))) 
         '(font-lock-variable-name-face
           ((((class color) (background dark)) (:foreground "yellow")) 
-           (((class color)) (:foreground "yellow")))) 
+           (((class color)) (:foreground "yellow"))))
+        '(fringe ((((class color) (background dark)) (:background "gray35"))))
         '(font-lock-warning-name-face
           ((((class color) (background dark)) (:foreground "DarkOrange")) 
            (((class color)) (:foreground "DarkOrange"))))))
@@ -408,6 +409,16 @@
 (require 'tool-bar+)
 (tool-bar-pop-up-mode 1)
 
+
+;; ----------------------------------------------------------------------- ;;
+;; Highlight-Indentation (shows vertical bars for indentation)
+;; ----------------------------------------------------------------------- ;;
+
+(require 'highlight-indentation)
+;; Same as the fringe color (the little bar on the left/right
+;; turn on with "M-x highlight-indentation"
+
+
 ;; ----------------------------------------------------------------------- ;;
 ;; full-ack mode (use ack source code grep tool within emacs)
 ;; ----------------------------------------------------------------------- ;;
@@ -471,3 +482,4 @@
  '(mlint-programs (quote ("mlint" "glnx86/mlint" "/opt/matlab/bin/glnx86/mlint")))
  '(safe-local-variable-values (quote ((save-place . t))))
  '(scroll-bar-mode (quote right)))
+
