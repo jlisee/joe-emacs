@@ -59,6 +59,7 @@
 (global-set-key "\C-c\C-a" 'mark-whole-buffer) ; rebind select all
 (global-set-key "\C-cc" 'comment-region)
 (global-set-key "\C-cu" 'uncomment-region)
+(global-set-key "\C-ca" 'ack)
 
 ;; (define-key global-map "\C-xw" 'what-line)
 ;; (define-key global-map "\C-z" 'undo)
@@ -406,6 +407,16 @@
 
 (require 'tool-bar+)
 (tool-bar-pop-up-mode 1)
+
+;; ----------------------------------------------------------------------- ;;
+;; full-ack mode (use ack source code grep tool within emacs)
+;; ----------------------------------------------------------------------- ;;
+
+;; These auto-load the ack file whenever we run the command
+(autoload 'ack-same "full-ack" nil t)
+(autoload 'ack "full-ack" nil t)
+(autoload 'ack-find-same-file "full-ack" nil t)
+(autoload 'ack-find-file "full-ack" nil t)
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Latex
