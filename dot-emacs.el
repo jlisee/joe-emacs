@@ -29,8 +29,7 @@
       (add-to-list 'load-path  default-directory)
       ;; Load settings created by customize
       (setq custom-file (concat default-directory "custom.el"))
-      (load (concat default-directory "custom.el") t t)
-      )
+      (load custom-file))
 
 
 ;; ----------------------------------------------------------------------- ;;
@@ -47,20 +46,38 @@
 ;; TAB SIZE (can't get this to work)
 ;;(defun jl-tab-size() 2)
 
-;; Saving place in files
-(setq save-place-file "~/.emacs.d/saveplace") ;; keep my ~/ clean
-;;(setq-default save-place t)                 ;; activate it for all buffers
-(require 'saveplace)                          ;; get the package
-
-
+;; Specials for X Window System
 (if (not window-system)
-    nil
+    ;; ispell
+    ;; ----------------------
+    ;; (A few changes on ispell)
+    (setq ispell-highlight-face 'underline);)
+
   ;; Width and height
   (set-screen-width 80)
   (set-screen-height 72)
 
   ;; Remove Menu bar (tool bar disabled with tool-bar+ below)
   (menu-bar-mode -99)
+
+  ;;
+  ;; Some dialog
+  ;; ------------------
+  (setq use-dialog-box t)
+  ;;
+  ;; less dialog
+  ;; -----------
+  ;(menu-prompting nil)
+  ;; 
+  ;; Set X synchrone
+  ;; ---------------
+  ;; Speed up
+  (setq mouse-scroll-delay 0)
+  (setq x-selection-timeout 0)
+
+  ;; Have cut and paste work properly
+  (setq x-select-enable-clipboard t)
+  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 )
 
 ;; ----------------------------------------------------------------------- ;;
@@ -88,6 +105,25 @@
 ;; (define-key global-map [f12] 'revert-buffer)
 ;; (define-key global-map [button4] 'previous-line)
 ;; (define-key global-map [button5] 'next-line)
+
+
+;; ----------------------------------------------------------------------- ;;
+;; Byte compile files to speed up loading
+;; ----------------------------------------------------------------------- ;;
+
+;; Current disable because it did not seem to help the startup time
+(setq font-lock-verbose nil)
+(setq byte-compile-verbose nil)
+;;(load "byte-code-cache")
+
+;; ----------------------------------------------------------------------- ;;
+;; Save Place Package (re-open files in the same location)
+;; ----------------------------------------------------------------------- ;;
+
+;; Saving place in files
+(setq save-place-file "~/.emacs.d/saveplace") ;; keep my ~/ clean
+;;(setq-default save-place t)                 ;; activate it for all buffers
+(require 'saveplace)                          ;; get the package
 
 
 ;; ----------------------------------------------------------------------- ;;
@@ -423,34 +459,7 @@
 (add-hook 'latex-mode-hook (lambda () (longlines-mode +1)))
 
 
-;; ----------------------------------------------------------------------- ;;
-;; Specials for X Window System
-;; ----------------------------------------------------------------------- ;;
-(if (not window-system)
-      ;; ispell
-      ;; ----------------------
-      ;; (A few changes on ispell)
-      (setq ispell-highlight-face 'underline);)
 
-  ;;
-  ;; Some dialog
-  ;; ------------------
-  (setq use-dialog-box t)
-  ;;
-  ;; less dialog
-  ;; -----------
-  ;(menu-prompting nil)
-  ;; 
-  ;; Set X synchrone
-  ;; ---------------
-  ;; Speed up
-  (setq mouse-scroll-delay 0)
-  (setq x-selection-timeout 0)
-
-  ;; Have cut and paste work properly
-  (setq x-select-enable-clipboard t)
-  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-)
 
 
 
