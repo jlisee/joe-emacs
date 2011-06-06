@@ -261,7 +261,8 @@
   (setq-default fill-column 80) ;; Fill column at 80
   (if (not window-system)
       nil
-    (fci-mode)))
+    (fci-mode))
+  (paren-toggle-open-paren-context 1)) ;; Turn on mic-paren
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 
@@ -409,6 +410,13 @@
 (require 'tool-bar+)
 (tool-bar-pop-up-mode 1)
 
+
+;; ----------------------------------------------------------------------- ;;
+;; Mic-Paren (better paren matching, put into the c-mode hook)
+;; ----------------------------------------------------------------------- ;;
+
+(require 'mic-paren)
+(paren-activate)     ; activating
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Highlight-Indentation (shows vertical bars for indentation)
