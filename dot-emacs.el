@@ -18,6 +18,22 @@
 ;;  -Get compilation and error jumping working
 
 ;; ----------------------------------------------------------------------- ;;
+;; Path Setup
+;; ----------------------------------------------------------------------- ;;
+
+;; Add the sub directories holding this .emacs to the load path. This assumes
+;; the .emacs is really a symlink to a subdirectory containing all the needed 
+;; emacs files
+(let ((default-directory (file-name-directory (file-truename load-file-name))))
+      (normal-top-level-add-subdirs-to-load-path)
+      (add-to-list 'load-path  default-directory)
+      ;; Load settings created by customize
+      (setq custom-file (concat default-directory "custom.el"))
+      (load (concat default-directory "custom.el") t t)
+      )
+
+
+;; ----------------------------------------------------------------------- ;;
 ;; Standard Settings
 ;; ----------------------------------------------------------------------- ;;
 
@@ -119,11 +135,6 @@
 ;; Misc Libraries and Custom modes
 ;; ----------------------------------------------------------------------- ;;
 
-;; Load all the sub directories holding this .emacs. This assumes the .emacs
-;; is really a symlink to a subdirectory containing all the needed emacs files
-(let ((default-directory (file-name-directory (file-truename load-file-name))))
-      (normal-top-level-add-subdirs-to-load-path)
-      (add-to-list 'load-path  default-directory))
 
 ;; Smart tabing - tab based smart indenting useful for editing code that uses 
 ;; tabs, turn on with M-x smart-tab-mode
@@ -441,21 +452,5 @@
   (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 )
 
-;; ----------------------------------------------------------------------- ;;
-;; Custom Set Variables
-;; ----------------------------------------------------------------------- ;;
 
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(delete-selection-mode nil)
- '(inhibit-startup-screen t)
- '(matlab-functions-have-end t)
- '(matlab-shell-command "/opt/matlab/bin/matlab")
- '(matlab-verify-on-save-flag t)
- '(mlint-programs (quote ("mlint" "glnx86/mlint" "/opt/matlab/bin/glnx86/mlint")))
- '(safe-local-variable-values (quote ((save-place . t))))
- '(scroll-bar-mode (quote right)))
 
