@@ -85,61 +85,16 @@
 (defconst pointer-color "white")
 
 (progn 
-  (add-to-list 'default-frame-alist '(foreground-color . "gray85"))
-  (add-to-list 'default-frame-alist '(background-color . "gray25"))
   (add-to-list 'default-frame-alist '(cursor-color . "red3"))
   (add-to-list 'default-frame-alist '(background-mode . dark))
   (set-cursor-color cursor-color)
   (set-mouse-color pointer-color))
 
-;; Setup font-lock syntax coloring package
-;; This is broken for some reason, It gives me the dark bacground but the
-;; light forecolors
-(defconst lconfig-font-lock-faces  
-  (list '(font-lock-builtin-face 
-          ((((class color) (background dark)) (:foreground "cyan" :bold t)) 
-           (((class color)) (:foreground "cyan" :bold t)))) 
-        '(font-lock-comment-face 
-          ((((class color) (background dark)) (:foreground "LightPink")) 
-           (((class color)) (:foreground "LightPink")))) 
-        '(font-lock-constant-face
-          ((((class color) (background dark)) (:foreground "SpringGreen")) 
-           (((class color)) (:foreground "SpringGreen")))) 
-        '(font-lock-doc-string-face
-          ((((class color) (background dark)) (:foreground "SpringGreen")) 
-           (((class color)) (:foreground "#8080FE")))) 
-        '(font-lock-function-name-face
-          ((((class color) (background dark)) (:foreground "wheat3")) 
-           (((class color)) (:foreground "wheat3")))) 
-        '(font-lock-keyword-face
-          ((((class color) (background dark)) (:foreground "SkyBlue" :bold t))
-           (((class color)) (:foreground "SkyBlue" :bold t)))) 
-        '(font-lock-preprocessor-face
-          ((((class color) (background dark)) (:foreground "SkyBlue")) 
-           (((class color)) (:foreground "SkyBlue")))) 
-        '(font-lock-reference-face
-          ((((class color) (background dark)) (:foreground "yellow")) 
-           (((class color)) (:foreground "yellow")))) 
-        '(font-lock-string-face
-          ((((class color) (background dark)) (:foreground "SpringGreen")) 
-           (((class color)) (:foreground "SpringGreen")))) 
-        '(font-lock-type-face
-         ((((class color) (background dark)) (:foreground "orange1")) 
-           (((class color)) (:foreground "orange1")))) 
-        '(font-lock-variable-name-face
-          ((((class color) (background dark)) (:foreground "yellow")) 
-           (((class color)) (:foreground "yellow"))))
-        '(fringe ((((class color) (background dark)) (:background "gray35"))))
-        '(font-lock-warning-name-face
-          ((((class color) (background dark)) (:foreground "DarkOrange")) 
-           (((class color)) (:foreground "DarkOrange"))))))
-
 ;; If possible set up a custom color scheme, otherwise turn colors off
 (autoload 'custom-set-faces "font-lock" "Set the color scheme" t)
 (autoload 'font-lock-fontify-buffer "font-lock" "Fontify Buffer" t)
 (condition-case err
-    (progn (apply 'custom-set-faces lconfig-font-lock-faces)
-           (add-hook 'c-mode-common-hook 'font-lock-fontify-buffer)
+    (progn (add-hook 'c-mode-common-hook 'font-lock-fontify-buffer)
            (add-hook 'emacs-lisp-mode-hook 'font-lock-fontify-buffer)
            )
   (error (progn
@@ -167,7 +122,8 @@
 ;; Load all the sub directories holding this .emacs. This assumes the .emacs
 ;; is really a symlink to a subdirectory containing all the needed emacs files
 (let ((default-directory (file-name-directory (file-truename load-file-name))))
-      (normal-top-level-add-subdirs-to-load-path))
+      (normal-top-level-add-subdirs-to-load-path)
+      (add-to-list 'load-path  default-directory))
 
 ;; Smart tabing - tab based smart indenting useful for editing code that uses 
 ;; tabs, turn on with M-x smart-tab-mode
@@ -278,6 +234,18 @@
   ;;        (define-key c-mode-base-map [f10] 'step-over)
   ;;        (define-key c-mode-base-map [f11] 'step-into)
   ;;        (c-add-style "Joe's Coding Style" jlisee-c-style t)))
+
+
+;; ----------------------------------------------------------------------- ;;
+;; Color-Theme Package
+;; ----------------------------------------------------------------------- ;;
+
+(require 'color-theme)
+(load-library "color-theme-joe-dark")
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     (color-theme-joe-dark)))
 
 
 ;; ----------------------------------------------------------------------- ;;
