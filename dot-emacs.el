@@ -164,6 +164,7 @@
 (add-to-list 'auto-mode-alist '("wscript$" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.xdr$" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.inl$" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.m$" . matlab-mode))
 
 
