@@ -1,3 +1,8 @@
+;; My first color theme, a conversion of my manually huge dark color theme
+;; Based on the blog from here:
+;;   http://emacs-fu.blogspot.com/2009/03/color-theming.html
+;;   http://emacs-fu.blogspot.com/2010/04/zenburn-color-theme.html
+
 (require 'color-theme)
 (defun color-theme-joe-dark ()
   "Joseph Lisee's dark theme (converted from a borrowed emacs colors) Jun 2011"
