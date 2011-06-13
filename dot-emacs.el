@@ -93,6 +93,7 @@
 (global-set-key "\C-cc" 'comment-region)
 (global-set-key "\C-cu" 'uncomment-region)
 (global-set-key "\C-ca" 'ack)
+(define-key global-map [f7] 'recompile) ; recompile
 
 ;; (define-key global-map "\C-xw" 'what-line)
 ;; (define-key global-map "\C-z" 'undo)
