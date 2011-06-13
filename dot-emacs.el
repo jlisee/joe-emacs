@@ -84,15 +84,17 @@
 ;; Global Key Bindings
 ;; ----------------------------------------------------------------------- ;;
 
-;; Change goto line
-(global-set-key "\C-x\C-g" 'goto-line)
-(global-set-key "\C-c\C-g" 'goto-line)
+
+(global-set-key "\C-x\C-g" 'goto-line) ; Change goto line
+(global-set-key "\C-c\C-g" 'goto-line) ; Change goto line
 (global-set-key (kbd "C-x m") 'menu-bar-mode) ; menu hide/show
 (global-set-key (kbd "C-x t") 'show-tool-bar-for-one-command) ; toolbar show
 (global-set-key "\C-c\C-a" 'mark-whole-buffer) ; rebind select all
 (global-set-key "\C-cc" 'comment-region)
 (global-set-key "\C-cu" 'uncomment-region)
 (global-set-key "\C-ca" 'ack)
+(global-set-key "\C-co" 'occur)
+
 (define-key global-map [f7] 'recompile) ; recompile
 
 ;; (define-key global-map "\C-xw" 'what-line)
