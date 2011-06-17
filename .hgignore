@@ -1,3 +1,8 @@
 syntax: glob
 
 *~
+*.elc
+
+syntax: regexp
+^cedet-1.0/.*compile-script$
+^cedet-1.0/.*grammar-make-script$
