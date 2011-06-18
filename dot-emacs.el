@@ -11,7 +11,6 @@
 ;; last mod: 2011-05-26
 ;;-----------------------------------------------------------------------------
 
-
 ;; TODO:
 ;;  -Make emacs sub directory setable up here
 ;;  -Fix flyspell C++ issue
