@@ -85,9 +85,9 @@
 ;; Global Key Bindings
 ;; ----------------------------------------------------------------------- ;;
 
-;; Change goto line
-(global-set-key "\C-x\C-g" 'goto-line)
-(global-set-key "\C-c\C-g" 'goto-line)
+
+(global-set-key "\C-x\C-g" 'goto-line) ; Change goto line
+(global-set-key "\C-c\C-g" 'goto-line) ; Change goto line
 (global-set-key (kbd "C-x m") 'menu-bar-mode) ; menu hide/show
 (global-set-key (kbd "C-x t") 'show-tool-bar-for-one-command) ; toolbar show
 (global-set-key "\C-c\C-a" 'mark-whole-buffer) ; rebind select all
@@ -95,6 +95,8 @@
 (global-set-key "\C-cu" 'uncomment-region)
 (global-set-key "\C-ca" 'ack)
 (global-set-key "\C-co" 'occur)
+
+(define-key global-map [f7] 'recompile) ; recompile
 
 ;; (define-key global-map "\C-xw" 'what-line)
 ;; (define-key global-map "\C-z" 'undo)
@@ -166,6 +168,7 @@
 (add-to-list 'auto-mode-alist '("wscript$" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.xdr$" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.inl$" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.m$" . matlab-mode))
 
 
