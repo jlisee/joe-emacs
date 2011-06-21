@@ -5,12 +5,29 @@
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" && pwd )"
 
-# Backup existing emacs file
-if [ -f $HOME/.emacs ]
+DOT_EMACS=$HOME/.emacs
+JOE_DOT_EMACS=$SCRIPT_PATH/dot-emacs.el
+DO_LINK="YES"
+
+# If we are already sym linked just bail from the script
+if [ -h $DOT_EMACS ]
 then
-    mv $HOME/.emacs $HOME/.emacs.orig-`date +"%Y-%m-%d-%T"`
+    if [ $JOE_DOT_EMACS = `readlink $DOT_EMACS` ]
+    then
+        DO_LINK="NO"
+    fi
 fi
 
-# Sym-link in the current file
-ln -s $SCRIPT_PATH/dot-emacs.el $HOME/.emacs 
+# Only link if we need to
+if [ "NO" != $DO_LINK ]
+then
+    # Backup existing emacs file
+    if [ -f $DOT_EMACS ]
+    then
+        mv $DOT_EMACS $HOME/.emacs.orig-`date +"%Y-%m-%d-%T"`
+    fi
+
+    # Sym-link in the current file
+    ln -s $JOE_DOT_EMACS $DOT_EMACS 
+fi
 
