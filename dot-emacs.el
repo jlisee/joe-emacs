@@ -295,71 +295,81 @@
 ;; on the current emacs exe)
 ;; See here: http://www.lonecpluspluscoder.com/2010/08/using-cedet-1-0-pre7-with-emacs-23-2/ (in the comments for a better way todo this if trouble continues)
 
-;; Load up CEDET
-(let ((default-directory (file-name-directory (file-truename load-file-name))))
-  (load-file (concat default-directory "/cedet-1.0/common/cedet.el")))
+;; Determine whether or not we should load cedet
+(setq use-cedet t)
 
-;; Small features (like idle showing)
-(semantic-load-enable-code-helpers)
+;; Now load cedet only if that is true
+(if (not use-cedet)
+    ;; nothing
+    nil
 
-;; Adds function to the status line
-(semantic-load-enable-excessive-code-helpers)
+  ;; Load up CEDET
+  (let ((default-directory (file-name-directory 
+                            (file-truename load-file-name))))
+    (load-file (concat default-directory "/cedet-1.0/common/cedet.el")))
 
-; Names completion and display of tags
-(require 'semantic-ia)
-; Auto locate system include files
-(require 'semantic-gcc)         
+  ;; Small features (like idle showing)
+  (semantic-load-enable-code-helpers)
 
-;; R@M system include location
-(semantic-add-system-include "/opt/ram/local/include" 'c++-mode)
+  ;; Adds function to the status line
+  (semantic-load-enable-excessive-code-helpers)
 
-;; Load up the semantic DB (should already be loaded)
-(require 'semanticdb)
-(global-semanticdb-minor-mode 1)
+  ;; Names completion and display of tags
+  (require 'semantic-ia)
+  ;; Auto locate system include files
+  (require 'semantic-gcc)         
 
-(defun my-cedet-hook ()
-  (local-set-key [(control return)] 'semantic-ia-complete-symbol)
-  (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
-  (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
-  (local-set-key "\C-c=" 'semantic-decoration-include-visit)
-  (local-set-key "\C-cj" 'semantic-ia-fast-jump)
-  (local-set-key "\C-cq" 'semantic-ia-show-doc)
-  (local-set-key "\C-cs" 'semantic-ia-show-summary)
-  (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
-  (local-set-key "\C-c+" 'semantic-tag-folding-show-block)
-  (local-set-key "\C-c-" 'semantic-tag-folding-fold-block)
-  (local-set-key "\C-c\C-c+" 'semantic-tag-folding-show-all)
-  (local-set-key "\C-c\C-c-" 'semantic-tag-folding-fold-all)
+  ;; R@M system include location
+  (semantic-add-system-include "/opt/ram/local/include" 'c++-mode)
+
+  ;; Load up the semantic DB (should already be loaded)
+  (require 'semanticdb)
+  (global-semanticdb-minor-mode 1)
+
+  (defun my-cedet-hook ()
+    (local-set-key [(control return)] 'semantic-ia-complete-symbol)
+    (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
+    (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
+    (local-set-key "\C-c=" 'semantic-decoration-include-visit)
+    (local-set-key "\C-cj" 'semantic-ia-fast-jump)
+    (local-set-key "\C-cq" 'semantic-ia-show-doc)
+    (local-set-key "\C-cs" 'semantic-ia-show-summary)
+    (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
+    (local-set-key "\C-c+" 'semantic-tag-folding-show-block)
+    (local-set-key "\C-c-" 'semantic-tag-folding-fold-block)
+    (local-set-key "\C-c\C-c+" 'semantic-tag-folding-show-all)
+    (local-set-key "\C-c\C-c-" 'semantic-tag-folding-fold-all)
+    )
+  (add-hook 'c-mode-common-hook 'my-cedet-hook)
+  
+  (global-semantic-tag-folding-mode 1)
+  
+  (require 'eassist)
+  
+  ;(concat essist-header-switches ("hh" "cc"))
+  (defun alexott/c-mode-cedet-hook ()
+    (local-set-key "\C-ct" 'eassist-switch-h-cpp)
+    (local-set-key "\C-xt" 'eassist-switch-h-cpp)
+    (local-set-key "\C-ce" 'eassist-list-methods)
+    (local-set-key "\C-c\C-r" 'semantic-symref)
+    )
+  (add-hook 'c-mode-common-hook 'alexott/c-mode-cedet-hook)
+  
+  ;; gnu global support
+  (require 'semanticdb-global)
+  (semanticdb-enable-gnu-global-databases 'c-mode)
+  (semanticdb-enable-gnu-global-databases 'c++-mode)
+
+  ;; ctags support
+  (require 'semanticdb-ectag)
+  (semantic-load-enable-primary-exuberent-ctags-support)
+
+  ;; High light all instances of a symbol with a click
+  ;;(global-semantic-idle-tag-highlight-mode 1)
+
+  ;; do use project manager
+  (global-ede-mode t)
   )
-(add-hook 'c-mode-common-hook 'my-cedet-hook)
-
-(global-semantic-tag-folding-mode 1)
-
-(require 'eassist)
-
-;(concat essist-header-switches ("hh" "cc"))
-(defun alexott/c-mode-cedet-hook ()
-  (local-set-key "\C-ct" 'eassist-switch-h-cpp)
-  (local-set-key "\C-xt" 'eassist-switch-h-cpp)
-  (local-set-key "\C-ce" 'eassist-list-methods)
-  (local-set-key "\C-c\C-r" 'semantic-symref)
-  )
-(add-hook 'c-mode-common-hook 'alexott/c-mode-cedet-hook)
-
-;; gnu global support
-(require 'semanticdb-global)
-(semanticdb-enable-gnu-global-databases 'c-mode)
-(semanticdb-enable-gnu-global-databases 'c++-mode)
-
-;; ctags support
-(require 'semanticdb-ectag)
-(semantic-load-enable-primary-exuberent-ctags-support)
-
-;; High light all instances of a symbol with a click
-;;(global-semantic-idle-tag-highlight-mode 1)
-
-; do use project manager
-(global-ede-mode t)
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Color-Theme Package
