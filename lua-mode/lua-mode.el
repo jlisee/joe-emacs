@@ -137,6 +137,23 @@ Should be a list of strings."
 (defvar lua-process-buffer nil
   "Buffer used for communication with Lua subprocess")
 
+(defmacro lua-called-interactively-p (kind) 
+  (condition-case nil 
+      (progn (called-interactively-p nil)
+             ;; If the call didn't signal an error, then the new form 
+             ;; is supported: use it. 
+             `(called-interactively-p ,kind))
+    (wrong-number-of-arguments 
+     ;; Probably Emacs-23.1. 
+     (if (equal (eval kind) 'interactive) 
+         `(interactive-p) 
+       `(called-interactively-p)))
+    (error 
+     ;; called-interactively-p seems not to be supported, fallback 
+     ;; on the good ol' interactive-p. 
+     `(interactive-p))))
+
+
 (defun lua--customize-set-prefix-key (prefix-key-sym prefix-key-val)
   ;; FIXME: enable assertion, it requires 'cl and I'm not sure of its availability
   ;; (assert (eq prefix-key-sym 'lua-prefix-key))
@@ -943,7 +960,7 @@ When called interactively, switch to the process buffer."
       (accept-process-output (get-buffer-process (current-buffer)))
       (goto-char (point-max))))
   ;; when called interactively, switch to process buffer
-  (if (called-interactively-p 'any)
+  (if (lua-called-interactively-p 'any)
       (switch-to-buffer lua-process-buffer)))
 
 (defun lua-kill-process ()
@@ -1232,7 +1249,7 @@ If BEGIN is nil, start from `beginning-of-buffer'.
 If END is nil, stop at `end-of-buffer'."
   (interactive)
 
-  (if (and (called-interactively-p 'any) (use-region-p))
+  (if (and (lua-called-interactively-p 'any) (use-region-p))
       (setq begin (region-beginning)
             end (region-end)))
 
