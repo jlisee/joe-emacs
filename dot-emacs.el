@@ -321,6 +321,7 @@
 
   ;; R@M system include location
   (semantic-add-system-include "/opt/ram/local/include" 'c++-mode)
+  (semantic-add-system-include "/home/jlisee/dira/software/src" 'c++-mode)
 
   ;; Load up the semantic DB (should already be loaded)
   (require 'semanticdb)
@@ -371,6 +372,7 @@
   (global-ede-mode t)
   )
 
+
 ;; ----------------------------------------------------------------------- ;;
 ;; Color-Theme Package
 ;; ----------------------------------------------------------------------- ;;
@@ -418,6 +420,15 @@
   '(lambda ()
     (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 (setq yaml-indent-offset 2)
+
+
+;; ----------------------------------------------------------------------- ;;
+;; Lua Mode
+;; ----------------------------------------------------------------------- ;;
+
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
 
 
 ;; ----------------------------------------------------------------------- ;;
