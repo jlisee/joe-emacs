@@ -291,10 +291,6 @@
 ;; Color-Theme Package
 ;; ----------------------------------------------------------------------- ;;
 
-;; Remove prexisting cedet from the load path (TODO: make this passed based
-;; on the current emacs exe)
-;; See here: http://www.lonecpluspluscoder.com/2010/08/using-cedet-1-0-pre7-with-emacs-23-2/ (in the comments for a better way todo this if trouble continues)
-
 ;; Determine whether or not we should load cedet
 (setq use-cedet t)
 
@@ -302,6 +298,34 @@
 (if (not use-cedet)
     ;; nothing
     nil
+
+  ;; Try and strip local emacs packages cedet/eieie/speedbar from the load path
+  ;; We first need the full path to the true directory this version of emacs is
+  ;; in.  This does work because eieio is included from a base directory that 
+  ;; can't be stripped.  What is needed is a way to put cedet on the front of 
+  ;; the include path.  This idea if from here: 
+  ;; http://www.lonecpluspluscoder.com/2010/08/using-cedet-1-0-pre7-with-emacs-23-2/ (in the comments for a better way todo this if trouble continues)
+  (let ((base-path
+         (file-name-directory
+          (file-truename
+           (expand-file-name invocation-name invocation-directory)))))
+    (let ((base-load-path 
+           (replace-regexp-in-string 
+            "bin/$" 
+            (concat "share/emacs/"
+                    (substring emacs-version 0 -2) "/lisp/") 
+            base-path)))
+
+      (setq load-path 
+            (remove 
+             (concat base-load-path "cedet/")
+             load-path))
+
+      (setq load-path 
+            (remove 
+             (concat base-load-path "emacs-lisp/eieio.el")
+             load-path))
+      ))
 
   ;; Load up CEDET
   (let ((default-directory (file-name-directory 
@@ -374,18 +398,36 @@
   ;; This must be here in order for ede-cpp-root-to-work
   (ede-enable-generic-projects)
 
-  )
+  ;; TODO: Figure out how to get the project definition out of my .emacs
+  ;; file, hopefully into the root of the project files.  I can use the 
+  ;; search code from ack mode to look for a ".local.el" file.
+  ;; (ede-cpp-root-project "CARGO"
+  ;;   :name "CARGO Project"
+  ;;   :file "/home/jlisee/oshkosh/software/dev/SConstruct"
+  ;;   :include-path '("/"
+  ;;                   "/planning"
+  ;;                   "/perception"
+  ;;                   "/infrastructure/src/common"
+  ;;                   "/infrastructure/src/planning"
+  ;;                   "/infrastructure/src/perception"
+  ;;                   "/infrastructure/src/infrastructure"
+  ;;                   "/nrec/nrec/src")
+  ;;   :system-include-path '( "/opt/opencv-1.0-pre6/include/" )
+  ;;   :spp-table '( ("MOOSE" . "")
+  ;;               ("CONST" . "const") )
+  ;;   )
 
-;; Example project:
-;; TODO: figure out how to co-locate these with source
-;; (ede-cpp-root-project "R@M"
-;;   :name "R@M Project"
-;;   :file "/home/jlisee/projects/ram_code/CMakeLists.txt"
-;;   :include-path '( "/packages" )
-;;   :system-include-path '( "/opt/ram/local/include" )
-;;   :spp-table '( ("MOOSE" . "")
-;;                 ("CONST" . "const") )
-;;   )
+
+  ;; (ede-cpp-root-project "R@M"
+  ;;   :name "R@M Project"
+  ;;   :file "/home/jlisee/projects/ram_code/CMakeLists.txt"
+  ;;   :include-path '( "/packages" )
+  ;;   :system-include-path '( "/opt/ram/local/include" )
+  ;;   :spp-table '( ("MOOSE" . "")
+  ;;                 ("CONST" . "const") )
+  ;;   )
+
+  )
 
 
 ;; ----------------------------------------------------------------------- ;;
