@@ -370,7 +370,22 @@
 
   ;; do use project manager
   (global-ede-mode t)
+
+  ;; This must be here in order for ede-cpp-root-to-work
+  (ede-enable-generic-projects)
+
   )
+
+;; Example project:
+;; TODO: figure out how to co-locate these with source
+;; (ede-cpp-root-project "R@M"
+;;   :name "R@M Project"
+;;   :file "/home/jlisee/projects/ram_code/CMakeLists.txt"
+;;   :include-path '( "/packages" )
+;;   :system-include-path '( "/opt/ram/local/include" )
+;;   :spp-table '( ("MOOSE" . "")
+;;                 ("CONST" . "const") )
+;;   )
 
 
 ;; ----------------------------------------------------------------------- ;;
