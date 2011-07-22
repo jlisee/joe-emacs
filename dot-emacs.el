@@ -487,6 +487,14 @@
 (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
 (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
 
+;; ----------------------------------------------------------------------- ;;
+;; Conf Mode (syntax highlighting for ini files)
+;; ----------------------------------------------------------------------- ;;
+
+(add-to-list 'auto-mode-alist '(".*\\.ini$" . conf-mode))
+(add-to-list 'auto-mode-alist '(".*\\.conf$" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.hgrc$" . conf-mode))
+(add-to-list 'auto-mode-alist '("hgrc$" . conf-mode))
 
 ;; ----------------------------------------------------------------------- ;;
 ;; Flyspell Mode (Spell Checker)
