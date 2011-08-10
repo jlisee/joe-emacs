@@ -44,6 +44,10 @@
 (column-number-mode t) ;; Show column numbers
 (show-paren-mode t) ;; Match parens
 
+;; We don't want to ever split a window veritcally if we can help it so 
+;; we set this value really high
+(setq split-height-threshold 999)
+
 ;; TAB SIZE (can't get this to work)
 ;;(defun jl-tab-size() 2)
 
